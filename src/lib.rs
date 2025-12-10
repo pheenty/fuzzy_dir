@@ -1,5 +1,8 @@
 //! fuzzy_dir
 
+mod split;
+pub use split::split;
+
 /// Creates a score of how much the input and the pattern match
 ///
 /// The higher the score the better. There is no max score.
