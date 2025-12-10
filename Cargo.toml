@@ -1,0 +1,8 @@
+[package]
+name = "fuzzy_dir"
+description = "A fuzzy matching library specifically made for matching folder names."
+version = "0.1.0-alpha"
+edition = "2024"
+license = "MIT"
+
+[dependencies]
