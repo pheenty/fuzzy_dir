@@ -15,9 +15,13 @@ pub fn score_dir(input: &str, pattern: &str) -> i32 {
     {
         score += pattern.len() as i32 * char_value;
     }
-    let mut dir_name_mut = input.to_string();
+
+    let words = split(input);
+
+    let mut dir_name_mut = input.to_lowercase();
+    let mut last_char: char = ' ';
     for c in pattern.chars() {
-        if dir_name_mut.to_lowercase().contains(c.to_ascii_lowercase()) {
+        if dir_name_mut.contains(c.to_ascii_lowercase()) {
             score += char_value * 2;
             // strip the char to avoid multiple matches
             dir_name_mut = dir_name_mut.replacen(c, "", 1);
@@ -27,6 +31,25 @@ pub fn score_dir(input: &str, pattern: &str) -> i32 {
         } else {
             score -= char_value * 2;
         }
+
+        if words
+            .iter()
+            .find(|word| word.to_lowercase().starts_with(c))
+            .is_some()
+        {
+            score += char_value;
+        }
+        if words
+            .iter()
+            .find(|word| {
+                word.to_lowercase()
+                    .starts_with(&format!("{}{}", c, last_char))
+            })
+            .is_some()
+        {
+            score += char_value * 2;
+        }
+        last_char = c;
     }
     if input.to_lowercase() == pattern.to_lowercase() {
         score += 50;
@@ -43,17 +66,15 @@ mod tests {
 
     #[test]
     fn not_yet_implemented() {
-        // TODO: Should give more points if parts of query match
-        // beginning parts of input parts
-        // assert!(score("test", "tt") > score("test", "t"));
-        // assert!(score("test-abc", "ta") > score("test-abc", "te"));
-        // assert!(score("test abc", "ta") > score("test abc", "te"));
-        // assert!(score("test_abc", "ta") > score("test_abc", "te"));
+        assert!(score("test", "tt") > score("test", "t"));
+        assert!(score("test-abc", "ta") > score("test-abc", "te"));
+        assert!(score("test abc", "ta") > score("test abc", "te"));
+        assert!(score("test_abc", "ta") > score("test_abc", "te"));
 
-        // assert!(score("test_abc_a", "taa") > score("test_abc_a", "te"));
-        // assert!(score("test_abc_a", "taa") > score("test_abc_a", "tea"));
+        assert!(score("test_abc_a", "taa") > score("test_abc_a", "te"));
+        assert!(score("test_abc_a", "taa") > score("test_abc_a", "tea"));
 
-        // assert!(score("testAbc", "ta") > score("testAbc", "te"));
+        assert!(score("testAbc", "ta") > score("testAbc", "te"));
     }
 
     #[test]
