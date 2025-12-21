@@ -1,8 +1,17 @@
 [package]
 name = "fuzzy_dir"
 description = "A fuzzy matching library specifically made for matching folder names."
-version = "0.1.0-alpha"
+version = "0.1.0"
 edition = "2024"
 license = "MIT"
+repository = "https://github.com/timothebot/fuzzy_dir"
+homepage = "https://github.com/timothebot/fuzzy_dir"
+authors = ["timothebot"]
+readme = "README.md"
+categories = ["command-line-utilities"]
+keywords = ["utility"]
+exclude = [
+    ".github/*"
+]
 
 [dependencies]
