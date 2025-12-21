@@ -1,4 +1,16 @@
-//! fuzzy_dir
+//! # fuzzy_dir
+//! 
+//! A fuzzy matching library specifically made for matching folder names.
+//! 
+//! ## Getting started
+//! 
+//! ```rust
+//! let score: i32 = fuzzy_dir::score_dir("this_is_my_folder_name", "myfoldrnam");
+//! ```
+//! 
+//! This library also exports a split function which tries to split
+//! a folder name into its separate words. See [split](split::split) for
+//! more infos.
 
 mod split;
 pub use split::split;
@@ -37,7 +49,7 @@ pub fn score_dir(input: &str, pattern: &str) -> i32 {
             .find(|word| word.to_lowercase().starts_with(c))
             .is_some()
         {
-            score += char_value;
+            score += char_value * 3;
         }
         if words
             .iter()
@@ -47,7 +59,7 @@ pub fn score_dir(input: &str, pattern: &str) -> i32 {
             })
             .is_some()
         {
-            score += char_value * 2;
+            score += char_value * 4;
         }
         last_char = c;
     }
@@ -63,19 +75,6 @@ pub fn score_dir(input: &str, pattern: &str) -> i32 {
 #[cfg(test)]
 mod tests {
     use super::score_dir as score;
-
-    #[test]
-    fn not_yet_implemented() {
-        assert!(score("test", "tt") > score("test", "t"));
-        assert!(score("test-abc", "ta") > score("test-abc", "te"));
-        assert!(score("test abc", "ta") > score("test abc", "te"));
-        assert!(score("test_abc", "ta") > score("test_abc", "te"));
-
-        assert!(score("test_abc_a", "taa") > score("test_abc_a", "te"));
-        assert!(score("test_abc_a", "taa") > score("test_abc_a", "tea"));
-
-        assert!(score("testAbc", "ta") > score("testAbc", "te"));
-    }
 
     #[test]
     fn test_simple() {
@@ -96,5 +95,18 @@ mod tests {
     fn test_negative_queries() {
         assert!(score("helloworld", "ellovvvv") == 0);
         assert!(score("helloworld", "wx") == 0);
+    }
+
+    #[test]
+    fn test_separate_word_scoring() {
+        assert!(score("test", "tt") > score("test", "t"));
+        assert!(score("test-abc", "ta") > score("test-abc", "te"));
+        assert!(score("test abc", "ta") > score("test abc", "te"));
+        assert!(score("test_abc", "ta") > score("test_abc", "te"));
+
+        assert!(score("test_abc_a", "taa") > score("test_abc_a", "te"));
+        assert!(score("test_abc_a", "taa") > score("test_abc_a", "tea"));
+
+        assert!(score("testAbc", "ta") > score("testAbc", "te"));
     }
 }
