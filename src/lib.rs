@@ -44,19 +44,13 @@ pub fn score_dir(input: &str, pattern: &str) -> i32 {
             score -= char_value * 2;
         }
 
-        if words
-            .iter()
-            .any(|word| word.to_lowercase().starts_with(c))
-        {
+        if words.iter().any(|word| word.to_lowercase().starts_with(c)) {
             score += char_value * 3;
         }
-        if words
-            .iter()
-            .any(|word| {
-                word.to_lowercase()
-                    .starts_with(&format!("{}{}", c, last_char))
-            })
-        {
+        if words.iter().any(|word| {
+            word.to_lowercase()
+                .starts_with(&format!("{}{}", c, last_char))
+        }) {
             score += char_value * 4;
         }
         last_char = c;
