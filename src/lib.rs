@@ -46,18 +46,16 @@ pub fn score_dir(input: &str, pattern: &str) -> i32 {
 
         if words
             .iter()
-            .find(|word| word.to_lowercase().starts_with(c))
-            .is_some()
+            .any(|word| word.to_lowercase().starts_with(c))
         {
             score += char_value * 3;
         }
         if words
             .iter()
-            .find(|word| {
+            .any(|word| {
                 word.to_lowercase()
                     .starts_with(&format!("{}{}", c, last_char))
             })
-            .is_some()
         {
             score += char_value * 4;
         }
